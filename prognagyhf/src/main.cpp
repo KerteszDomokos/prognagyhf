@@ -12,30 +12,67 @@ int main() {
     while (true) {
         std::cout << "> ";
         std::getline(std::cin, command);
+        try {
+			db.loadFromFile("session.txt");
+        }
+        catch (const std::exception& ex) {
+            std::cerr << "Error: " << ex.what() << std::endl;
+		}
 
         try {
             if (command == "exit") {
                 break;
             } else if (command == "help") {
-                std::cout << "Commands: addtrain, save, load, exit\n";
+                std::cout << "Commands: addtrain, addcarrige, save, reload, exit\n";
             } else if (command == "addtrain") {
                 std::string id;
                 std::cout << "Train ID: ";
                 std::getline(std::cin, id);
                 db.addTrain(Train(id));
                 std::cout << "Train added.\n";
+
+            } else if (command == "addcarrige") {
+				std::string trainId;
+				Train* train = nullptr;
+				std::cout << "Train ID: ";
+				std::cin >> trainId;
+                train = db.findTrain(trainId);
+                
+                if (!db.findTrain(trainId)) {
+                    std::cout << "Train not found.\n would you like to create the train?(y/n) ";
+					std::string answer;
+					std::cin >> answer;
+					if (answer == "y") {
+						db.addTrain(Train(trainId));
+						std::cout << "Train created.\n";
+                        train = db.findTrain(trainId);
+					}
+                    else { continue; }
+				}
+                int id;
+				int seatCount=0;
+
+                std::cout << "Carrige ID: ";
+                std::cin >> id;
+				std::cout << "Seat count: ";
+                std::cin >> seatCount;
+				train->addCarriage(Carriage(id, seatCount));
+                std::cout << "Carrige added\n";
+
             } else if (command == "save") {
                 std::string filename;
                 std::cout << "Filename: ";
                 std::getline(std::cin, filename);
                 db.saveToFile(filename);
                 std::cout << "Session saved.\n";
-            } else if (command == "load") {
+
+            } else if (command == "reload") {
                 std::string filename;
                 std::cout << "Filename: ";
                 std::getline(std::cin, filename);
                 db.loadFromFile(filename);
                 std::cout << "Session loaded.\n";
+
             } else {
                 std::cout << "Unknown command.\n";
             }
@@ -43,6 +80,12 @@ int main() {
             std::cerr << "Error: " << ex.what() << std::endl;
         }
     }
+    try{
+		db.saveToFile("session.txt");
+	}
+	catch (const std::exception& ex) {
+		std::cerr << "Error: " << ex.what() << std::endl;
+	}
 
     return 0;
 }
