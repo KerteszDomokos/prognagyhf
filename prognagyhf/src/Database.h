@@ -8,8 +8,9 @@ private:
     std::vector<Train> trains;
 public:
     Database();
-    void addTrain(const Train& train);
+    Train* addTrain(const Train& train);
     Train* findTrain(const std::string& id);
+	Train* findTrainInteractions(const std::string& id);
     void saveToFile(const std::string& filename) const;
     void loadFromFile(const std::string& filename);
     const std::vector<Train>& getTrains() const;

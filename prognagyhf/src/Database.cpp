@@ -5,13 +5,28 @@
 
 Database::Database() {}
 
-void Database::addTrain(const Train& train) {
+Train* Database::addTrain(const Train& train) {
     trains.push_back(train);
 }
 
 Train* Database::findTrain(const std::string& id) {
     for (auto& train : trains) {
         if (train.getId() == id) return &train;
+    }
+    return nullptr;
+}
+
+Train* Database::findTrainInteractions(const std::string& id)
+{
+	Train* tr=findTrain(id);
+    if (!tr) {
+        std::cout << "Train not found.\n would you like to create the train?(y/n) ";
+        std::string answer;
+        std::cin >> answer;
+        if (answer == "y") {
+            tr=addTrain(Train(id));
+            std::cout << "Train created.\n";
+        }
     }
     return nullptr;
 }

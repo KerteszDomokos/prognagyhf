@@ -12,3 +12,7 @@ const std::string& Ticket::getPassengerName() const {
 int Ticket::getSeatNumber() const {
     return seatNumber;
 }
+
+void Ticket::bookSeat()
+{
+}

@@ -36,18 +36,10 @@ int main() {
 				Train* train = nullptr;
 				std::cout << "Train ID: ";
 				std::cin >> trainId;
-                train = db.findTrain(trainId);
+                train = db.findTrainInteractions(trainId);
                 
-                if (!db.findTrain(trainId)) {
-                    std::cout << "Train not found.\n would you like to create the train?(y/n) ";
-					std::string answer;
-					std::cin >> answer;
-					if (answer == "y") {
-						db.addTrain(Train(trainId));
-						std::cout << "Train created.\n";
-                        train = db.findTrain(trainId);
-					}
-                    else { continue; }
+                if (!train) {
+					continue;
 				}
                 int id;
 				int seatCount=0;
@@ -65,6 +57,26 @@ int main() {
                 std::getline(std::cin, filename);
                 db.saveToFile(filename);
                 std::cout << "Session saved.\n";
+
+            } else if (command == "book") {
+				std::string trainId;
+				Train* train = nullptr;
+				std::cout << "For which train? Train ID:";
+				std::cin >> trainId;
+				train = db.findTrainInteractions(trainId);
+				if (!train) { continue; }
+				int carriageId;
+				std::cout << "Carriage ID: ";
+				std::cin >> carriageId;
+				Carriage* carriage = train->findCarriage(carriageId);
+				if (!carriage) { continue; }
+				int seatNumber;
+				std::cout << "Seat number: ";
+				std::cin >> seatNumber;
+				std::string passengerName;
+				std::cout << "Passenger name: ";
+				std::cin.ignore(); // Ignore the newline character left in the buffer
+				std::getline(std::cin, passengerName);
 
             } else if (command == "reload") {
                 std::string filename;
