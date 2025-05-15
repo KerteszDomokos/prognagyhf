@@ -13,6 +13,3 @@ int Ticket::getSeatNumber() const {
     return seatNumber;
 }
 
-void Ticket::bookSeat()
-{
-}

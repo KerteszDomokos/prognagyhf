@@ -9,28 +9,75 @@ int main() {
     std::cout << "BME Train Ticket Management System\n";
     std::cout << "Type 'help' for commands.\n";
 
+    try {
+		db.loadFromFile("session.txt");
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "Error: " << ex.what() << std::endl;
+	}
     while (true) {
         std::cout << "> ";
-        std::getline(std::cin, command);
-        try {
-			db.loadFromFile("session.txt");
-        }
-        catch (const std::exception& ex) {
-            std::cerr << "Error: " << ex.what() << std::endl;
-		}
+		std::cin >> command;
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
 
         try {
             if (command == "exit") {
                 break;
             } else if (command == "help") {
                 std::cout << "Commands: addtrain, addcarrige, save, reload, exit\n";
+            } else if (command == "tickets") {
+                for (const auto& train : db.getTrains()) {
+                    std::cout << "Train ID: " << train.getId() << "\n";
+                    for (const auto& carriage : train.getCarriages()) {
+                        std::cout << "  Carriage ID: " << carriage.getId() << ", Seat Count: " << carriage.getSeatCount() << "\n";
+                        for (const auto& ticket : carriage.getTickets()) {
+                            std::cout << "    Ticket: " << ticket.getPassengerName() << ", Seat Number: " << ticket.getSeatNumber() << "\n";
+                        }
+                    }
+				}
+
             } else if (command == "addtrain") {
                 std::string id;
                 std::cout << "Train ID: ";
                 std::getline(std::cin, id);
+                if (db.findTrain(id)) {
+                    std::cout << "Train already exists.\n";
+                    continue;
+				}
                 db.addTrain(Train(id));
                 std::cout << "Train added.\n";
+            } else if (command == "map") {
+                std::cout << "Print reservation map...\n";
+                std::string trainId;
+                Train* train = nullptr;
+                std::cout << "Train ID:";
+                std::cin >> trainId;
 
+                train = db.findTrainInteractions(trainId);
+                if (train == nullptr) {
+                    std::cout << "Train not found, exiting.\n";
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
+                    continue;
+                }
+
+                for (const auto& carriage : train->getCarriages()) {
+                    std::cout << "Carriage ID: " << carriage.getId() << ", Seat Count: " << carriage.getSeatCount() << std::endl;
+                    for (int i=0; i < carriage.getSeatCount(); ++i) {
+                        if (i%2 == 0) {
+                            std::cout << "  ";
+                        }if (i % 4 == 0) {
+                            std::cout << "\n";
+                        }
+                        bool reserved = false;
+                        for (const auto& ticket : carriage.getTickets()) {
+                            if (ticket.getSeatNumber() == i) {
+                                reserved = true;
+                            }
+                            }
+                        std::cout << (reserved ? "[X]" : "[ ]");
+					}
+				}
+                std::cout << std::endl;
             } else if (command == "addcarrige") {
 				std::string trainId;
 				Train* train = nullptr;
@@ -50,40 +97,60 @@ int main() {
                 std::cin >> seatCount;
 				train->addCarriage(Carriage(id, seatCount));
                 std::cout << "Carrige added\n";
+                
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
 
-            } else if (command == "save") {
-                std::string filename;
-                std::cout << "Filename: ";
-                std::getline(std::cin, filename);
-                db.saveToFile(filename);
-                std::cout << "Session saved.\n";
 
             } else if (command == "book") {
+				std::cout << "Booking a ticket...\n";
 				std::string trainId;
 				Train* train = nullptr;
 				std::cout << "For which train? Train ID:";
-				std::cin >> trainId;
+                std::cin >> trainId;
+
 				train = db.findTrainInteractions(trainId);
-				if (!train) { continue; }
+				if (train==nullptr) { 
+					std::cout << "Train not found, exiting.\n";
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
+                    continue; 
+                }
 				int carriageId;
 				std::cout << "Carriage ID: ";
 				std::cin >> carriageId;
-				Carriage* carriage = train->findCarriage(carriageId);
-				if (!carriage) { continue; }
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
+				Carriage* carriage = train->findCarriageInteractions(carriageId);
+				if (carriage==nullptr) { 
+					std::cout << "Carriage not found, exiting.\n";
+                    continue; 
+                }
 				int seatNumber;
 				std::cout << "Seat number: ";
-				std::cin >> seatNumber;
+				std::cin >> seatNumber; std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
 				std::string passengerName;
 				std::cout << "Passenger name: ";
 				std::cin.ignore(); // Ignore the newline character left in the buffer
 				std::getline(std::cin, passengerName);
 
+                Ticket ticket(passengerName, seatNumber);
+
+                bool success=train->findCarriage(carriageId)-> reserveSeat(seatNumber, ticket);
+
+                std::cout << "Ticket booked successfully.\n";
+
+
+            //saving and realoading
             } else if (command == "reload") {
                 std::string filename;
                 std::cout << "Filename: ";
                 std::getline(std::cin, filename);
                 db.loadFromFile(filename);
                 std::cout << "Session loaded.\n";
+            } else if (command == "save") {
+                std::string filename;
+                std::cout << "Filename: ";
+                std::getline(std::cin, filename);
+                db.saveToFile(filename);
+                std::cout << "Session saved.\n";
 
             } else {
                 std::cout << "Unknown command.\n";

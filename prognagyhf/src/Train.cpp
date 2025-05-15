@@ -26,14 +26,19 @@ Carriage* Train::findCarriageInteractions(int id)
 	if (!c) {
 		std::cout << "Carriage not found.\n would you like to create the carriage?(y/n) ";
 		std::string answer;
-		std::cin >> answer;
+		std::getline(std::cin, answer);
 		if (answer == "y") {
 			int seatCount = 0;
 			std::cout << "Seat count: ";
+			std::cin >> seatCount; std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
 			c = new Carriage(id, seatCount); // Assuming default seat count is 0
 			addCarriage(*c);
-			std::cout << "Carriage created.\n";
+			std::cout << "Carriage created: " << c->getId() << ", "<<c->getSeatCount()<<"\n";
+			return c;
 		}
+	}
+	else {
+		return c;
 	}
     return nullptr;
 }
