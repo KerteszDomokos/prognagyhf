@@ -1,0 +1,81 @@
+﻿#include "Database.h"
+#include <fstream>
+#include <iostream>
+#include <string>
+
+Database::Database() {}
+
+void Database::addTrain(const Train& train) {
+    trains.push_back(train);
+}
+
+Train* Database::findTrain(const std::string& id) {
+    for (auto& train : trains) {
+        if (train.getId() == id) return &train;
+    }
+    return nullptr;
+}
+
+void Database::saveToFile(const std::string& filename) const {
+    
+    std::ofstream file(filename);
+    if (!file) {
+        throw std::runtime_error("Cannot open file for writing");
+    }
+    
+	std::string json = generateJSON();
+	file.write(json.c_str(), json.size());
+    
+    file.close();
+}
+
+void Database::loadFromFile(const std::string& filename) {
+    // TODO: Implement JSON import
+    std::ifstream ifs(filename);
+    if (!ifs) {
+        throw std::runtime_error("Cannot open file for reading");
+    }
+    // Placeholder: read and ignore
+    std::string line;
+    while (std::getline(ifs, line)) {
+        // Parse JSON here
+    }
+    ifs.close();
+}
+
+const std::vector<Train>& Database::getTrains() const {
+    return trains;
+}
+
+std::string Database::generateJSON() const
+{
+
+	std::string json = "{ \"trains\": [\n";
+    for (const auto& train : trains) {
+        json += "{ \"id\": \"" + train.getId() + "\", \"carriages\": [\n";
+
+        for (const auto& carriage : train.getCarriages()) {
+
+            json += "{ \"id\": " + std::to_string(carriage.getId()) + ", \"seatCount\": " +
+                    std::to_string(carriage.getSeatCount()) 
+                    + ", \"tickets\": [\n";
+
+            for (const auto& ticket : carriage.getTickets()) {
+                json += "{ \"passengerName\": \"" + ticket.getPassengerName() + "\", \"seatNumber\": " +
+                        std::to_string(ticket.getSeatNumber()) + " },\n";
+            }
+            json += "] },\n";
+        }
+        json += "] },\n";
+	}
+
+    return std::string();
+}
+
+void Database::readFromIstream(std::istream& is)
+{
+    std::string line;
+    while (std::getline(is, line)) {
+        // Parse JSON here
+    }
+}
