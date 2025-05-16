@@ -75,6 +75,6 @@ void Train::printReservationMap() const
             }
             std::cout << (reserved ? "\033[1;31m[X]" : "\033[1;32m[ ]");
         }
+    std::cout << "\033[0m\n" << std::endl; // Reset color
     }
-	std::cout << "\033[0m\n"; // Reset color
 }

@@ -7,7 +7,7 @@ Database::Database() {}
 
 Database::~Database()
 {
-	//trains.clear();
+	trains.clear();
 }
 
 Train* Database::addTrain(const Train& train) {
@@ -44,7 +44,7 @@ Train* Database::findTrainInteractions(const std::string& id)
     return nullptr;
 }
 
-void Database::saveToFile(const std::string& filename) const {
+void Database::saveToFile(std::string filename) const {
     std::ofstream file(filename);
     if (!file) {
         throw std::runtime_error("Cannot open file for writing");
@@ -73,8 +73,8 @@ void Database::saveToFile(const std::string& filename) const {
     file.close();
 }
 
-void Database::loadFromFile(const std::string& filename) {
-	trains.clear();//kellez? - kell, overloading miatt
+void Database::loadFromFile(std::string filename) {
+	trains.clear();//kellez? - kell, reload miatt miatt
 
     std::ifstream ifs(filename);
     if (!ifs) {
@@ -120,8 +120,6 @@ void Database::loadFromFile(const std::string& filename) {
 			}
             train.addCarriage(carriage);
 			//ifs.ignore(); // Skip nl
-
-
         }
 
         addTrain(train);

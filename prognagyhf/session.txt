@@ -2,21 +2,24 @@
 123
 2
 1 200
-14
+15
 af-1
 sddd-2
-ertesz-34
-agy huba-22
-agy tohotom-23
-is elemer-25
-ozsef benedek-26
-ozsef ivan-28
-ozsef kiraly-29
-agy ede-30
-agy odon-44
-agy kond-120
-agy arpad-60
-agy ond-122
+kertesz-34
+nagy huba-22
+nagy tohotom-23
+kis elemer-25
+jozsef benedek-26
+jozsef ivan-28
+jozsef kiraly-29
+nagy ede-30
+nagy odon-44
+nagy kond-120
+nagy arpad-60
+nagy ond-122
+kis j nos-54
 2 140
-1
-ertesz d-12
+3
+kertesz d-12
+balint-23
+kis istban-34

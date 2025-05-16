@@ -6,12 +6,12 @@
 #include <crtdbg.h>
 
 int main() {
-    {
+    //_CrtSetBreakAlloc(176);
     Database db;
     std::string command;
 
-    std::cout << "BME Train Ticket Management System\n";
-    std::cout << "Type 'help' for commands.\n";
+    std::cout << "BME Train Ticket Management System" << std::endl;
+    std::cout << "Type 'help' for commands."<<std::endl;
 
     try {
         db.loadFromFile("session.txt");
@@ -108,13 +108,14 @@ int main() {
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
                     continue;
                 }
-                int carriageId;
+                int carriageId=0;
                 std::cout << "Carriage ID: ";
                 std::cin >> carriageId;
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
                 Carriage* carriage = train->findCarriageInteractions(carriageId);
                 if (carriage == nullptr) {
                     std::cout << "Carriage not found, exiting.\n";
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     continue;
                 }
                 int seatNumber;
@@ -122,7 +123,6 @@ int main() {
                 std::cin >> seatNumber; std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
                 std::string passengerName;
                 std::cout << "Passenger name: ";
-                std::cin.ignore(); // Ignore the newline character left in the buffer
                 std::getline(std::cin, passengerName);
 
                 Ticket ticket(passengerName, seatNumber);
@@ -163,7 +163,9 @@ int main() {
     catch (const std::exception& ex) {
         std::cerr << "Error: " << ex.what() << std::endl;
     }
-}
+	db.~Database(); // Explicitly call destructor to clean up resources
+	command.clear(); // Clear the command string
+
 	_CrtDumpMemoryLeaks(); // Check for memory leaks
     return 0;
 }
