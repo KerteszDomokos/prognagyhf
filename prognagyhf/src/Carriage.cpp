@@ -6,7 +6,7 @@ Carriage::Carriage(int id, int seatCount) : id(id), seatCount(seatCount) {}
 
 Carriage::~Carriage()
 {
-	tickets.clear();
+	//tickets.clear();
 }
 
 bool Carriage::reserveSeat(int seatNumber, const Ticket& ticket) {

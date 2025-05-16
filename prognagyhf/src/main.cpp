@@ -131,8 +131,6 @@ int main() {
 
                 std::cout << "Ticket booked successfully.\n";
 
-
-                //saving and realoading
             }
             else if (command == "reload") {
                 std::string filename;
@@ -163,9 +161,9 @@ int main() {
     catch (const std::exception& ex) {
         std::cerr << "Error: " << ex.what() << std::endl;
     }
-	db.~Database(); // Explicitly call destructor to clean up resources
-	command.clear(); // Clear the command string
+	//db.~Database(); // Explicitly call destructor to clean up resources
+	//command.clear(); // Clear the command string
 
-	_CrtDumpMemoryLeaks(); // Check for memory leaks
+	//_CrtDumpMemoryLeaks(); // Check for memory leaks
     return 0;
 }

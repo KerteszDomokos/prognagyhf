@@ -3,11 +3,12 @@
 #include <iostream>
 #include <string>
 
-Database::Database() {}
+Database::Database() {
+}
 
 Database::~Database()
 {
-	trains.clear();
+    //trains.clear();
 }
 
 Train* Database::addTrain(const Train& train) {

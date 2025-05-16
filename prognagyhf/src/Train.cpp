@@ -9,7 +9,7 @@ Train::Train(const std::string& id) : id(id) {}
 Train::~Train()
 {
 
-	carriages.clear(); // Clear the vector of carriages
+	//carriages.clear(); // Clear the vector of carriages
 }
 
 void Train::addCarriage(const Carriage& carriage) {
