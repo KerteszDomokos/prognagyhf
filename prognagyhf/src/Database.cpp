@@ -5,6 +5,11 @@
 
 Database::Database() {}
 
+Database::~Database()
+{
+	//trains.clear();
+}
+
 Train* Database::addTrain(const Train& train) {
     trains.push_back(train);
 	return &trains.back();
@@ -57,9 +62,9 @@ void Database::saveToFile(const std::string& filename) const {
             file << carriage.getId() << " " << carriage.getSeatCount() << std::endl;
 
 			const auto& tickets = carriage.getTickets();
-			file << tickets.size() << std::endl;
+			file << tickets.size() << std::endl;    
             for (const auto& ticket : carriage.getTickets()) {
-                file << ticket.getPassengerName() << " " << ticket.getSeatNumber() << std::endl;
+                file << ticket.getPassengerName() << "-" << ticket.getSeatNumber() << std::endl;
 			}
 
         }
@@ -107,14 +112,14 @@ void Database::loadFromFile(const std::string& filename) {
             for (int k = 0; k < ticketCount; ++k) {
                 std::string passengerName;
                 int seatNumber;
-                std::getline(ifs, passengerName, ' ');
+                std::getline(ifs, passengerName, '-');
                 ifs >> seatNumber;
                 ifs.ignore(); // Skip nl
                 Ticket ticket(passengerName, seatNumber);
                 carriage.reserveSeat(seatNumber, ticket);
 			}
             train.addCarriage(carriage);
-			ifs.ignore(); // Skip nl
+			//ifs.ignore(); // Skip nl
 
 
         }

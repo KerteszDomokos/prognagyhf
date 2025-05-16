@@ -1,0 +1,70 @@
+book
+123
+1
+22
+Nagy huba
+book
+123
+1
+23
+Nagy tohotom
+book
+123
+1
+25
+kis elemer
+book
+123
+1
+26
+jozsef benedek
+book
+123
+1
+28
+jozsef ivan
+book
+123
+1
+29
+jozsef kiraly
+book
+123
+1
+30
+Nagy ede
+book
+123
+1
+44
+Nagy odon
+book
+123
+1
+120
+Nagy kond
+book
+123
+1
+60
+Nagy arpad
+book
+121
+1
+63
+Nagy elod
+book
+123
+1
+122
+Nagy ond
+book
+123
+1
+123
+Nagy kond
+book
+123
+1
+124
+Nagy tas

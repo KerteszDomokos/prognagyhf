@@ -4,11 +4,16 @@ Carriage::Carriage() : id(0), seatCount(0) {}
 
 Carriage::Carriage(int id, int seatCount) : id(id), seatCount(seatCount) {}
 
+Carriage::~Carriage()
+{
+	tickets.clear();
+}
+
 bool Carriage::reserveSeat(int seatNumber, const Ticket& ticket) {
 	// chack if the seat number is available
     for (const auto& t : tickets) {
         if (t.getSeatNumber() == seatNumber) {
-            std::cout << "Already booked, try an otherone" << std::endl;
+            std::cout <<t.getSeatNumber()<< " is already booked, try an otherone."<<std::endl;
             return false; // Seat already reserved
         }
     }

@@ -1,13 +1,22 @@
-2
+1
 123
-1
+2
 1 200
-3
-af 1
-sddd 2
-ertesz 34
-345
+14
+af-1
+sddd-2
+ertesz-34
+agy huba-22
+agy tohotom-23
+is elemer-25
+ozsef benedek-26
+ozsef ivan-28
+ozsef kiraly-29
+agy ede-30
+agy odon-44
+agy kond-120
+agy arpad-60
+agy ond-122
+2 140
 1
-1 200
-1
-is janos 12
+ertesz d-12

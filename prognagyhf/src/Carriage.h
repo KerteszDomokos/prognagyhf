@@ -10,6 +10,7 @@ private:
 public:
     Carriage();
     Carriage(int id, int seatCount);
+    ~Carriage();
     bool reserveSeat(int seatNumber, const Ticket& ticket);
     int getId() const;
     int getSeatCount() const;

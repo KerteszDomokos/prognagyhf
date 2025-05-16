@@ -6,6 +6,12 @@ Train::Train() : id("") {}
 // Constructor with id
 Train::Train(const std::string& id) : id(id) {}
 
+Train::~Train()
+{
+
+	carriages.clear(); // Clear the vector of carriages
+}
+
 void Train::addCarriage(const Carriage& carriage) {
     carriages.push_back(carriage);
 }
@@ -31,10 +37,10 @@ Carriage* Train::findCarriageInteractions(int id)
 			int seatCount = 0;
 			std::cout << "Seat count: ";
 			std::cin >> seatCount; std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
-			c = new Carriage(id, seatCount); // Assuming default seat count is 0
-			addCarriage(*c);
-			std::cout << "Carriage created: " << c->getId() << ", "<<c->getSeatCount()<<"\n";
-			return c;
+			Carriage carriage(id, seatCount);
+			addCarriage(carriage);
+			std::cout << "Carriage created: " << carriage.getId() << ", "<< carriage.getSeatCount()<<"\n";
+			return findCarriage(id); // Return pointer to the carriage in the vector
 		}
 	}
 	else {
@@ -49,4 +55,26 @@ const std::string& Train::getId() const {
 
 const std::vector<Carriage>& Train::getCarriages() const {
     return carriages;
+}
+
+void Train::printReservationMap() const
+{
+    for (const auto& carriage : getCarriages()) {
+        std::cout << "Carriage ID: " << carriage.getId() << ", Seat Count: " << carriage.getSeatCount() << std::endl;
+        for (int i = 0; i < carriage.getSeatCount(); ++i) {
+            if (i % 2 == 0) {
+                std::cout << "  ";
+            }if (i % 4 == 0) {
+                std::cout << "\n";
+            }
+            bool reserved = false;
+            for (const auto& ticket : carriage.getTickets()) {
+                if (ticket.getSeatNumber() == i) {
+                    reserved = true;
+                }
+            }
+            std::cout << (reserved ? "\033[1;31m[X]" : "\033[1;32m[ ]");
+        }
+    }
+	std::cout << "\033[0m\n"; // Reset color
 }

@@ -5,6 +5,10 @@ Ticket::Ticket() : passengerName(""), seatNumber(-1) {}
 Ticket::Ticket(const std::string& passengerName, int seatNumber)
     : passengerName(passengerName), seatNumber(seatNumber) {}
 
+Ticket::~Ticket()
+{
+}
+
 const std::string& Ticket::getPassengerName() const {
     return passengerName;
 }

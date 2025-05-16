@@ -2,7 +2,11 @@
 #include <string>
 #include "Database.h"
 
+#define _CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+
 int main() {
+    {
     Database db;
     std::string command;
 
@@ -10,43 +14,47 @@ int main() {
     std::cout << "Type 'help' for commands.\n";
 
     try {
-		db.loadFromFile("session.txt");
+        db.loadFromFile("session.txt");
     }
     catch (const std::exception& ex) {
         std::cerr << "Error: " << ex.what() << std::endl;
-	}
+    }
     while (true) {
         std::cout << "> ";
-		std::cin >> command;
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
+        std::cin >> command;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
 
         try {
             if (command == "exit") {
                 break;
-            } else if (command == "help") {
-                std::cout << "Commands: addtrain, addcarrige, save, reload, exit\n";
-            } else if (command == "tickets") {
+            }
+            else if (command == "help") {
+                std::cout << "Commands: addtrain, addcarrige, save, reload, book, map, tickets, exit\n";
+            }
+            else if (command == "tickets") {
                 for (const auto& train : db.getTrains()) {
                     std::cout << "Train ID: " << train.getId() << "\n";
                     for (const auto& carriage : train.getCarriages()) {
                         std::cout << "  Carriage ID: " << carriage.getId() << ", Seat Count: " << carriage.getSeatCount() << "\n";
                         for (const auto& ticket : carriage.getTickets()) {
-                            std::cout << "    Ticket: " << ticket.getPassengerName() << ", Seat Number: " << ticket.getSeatNumber() << "\n";
+                            std::cout << "    Ticket: \033[1;33m" << ticket.getPassengerName() << "\033[0m, Seat Number: \033[1;33m" << ticket.getSeatNumber() << "\033[0m\n";
                         }
                     }
-				}
+                }
 
-            } else if (command == "addtrain") {
+            }
+            else if (command == "addtrain") {
                 std::string id;
                 std::cout << "Train ID: ";
                 std::getline(std::cin, id);
                 if (db.findTrain(id)) {
                     std::cout << "Train already exists.\n";
                     continue;
-				}
+                }
                 db.addTrain(Train(id));
                 std::cout << "Train added.\n";
-            } else if (command == "map") {
+            }
+            else if (command == "map") {
                 std::cout << "Print reservation map...\n";
                 std::string trainId;
                 Train* train = nullptr;
@@ -60,111 +68,102 @@ int main() {
                     continue;
                 }
 
-                for (const auto& carriage : train->getCarriages()) {
-                    std::cout << "Carriage ID: " << carriage.getId() << ", Seat Count: " << carriage.getSeatCount() << std::endl;
-                    for (int i=0; i < carriage.getSeatCount(); ++i) {
-                        if (i%2 == 0) {
-                            std::cout << "  ";
-                        }if (i % 4 == 0) {
-                            std::cout << "\n";
-                        }
-                        bool reserved = false;
-                        for (const auto& ticket : carriage.getTickets()) {
-                            if (ticket.getSeatNumber() == i) {
-                                reserved = true;
-                            }
-                            }
-                        std::cout << (reserved ? "[X]" : "[ ]");
-					}
-				}
+                train->printReservationMap();
                 std::cout << std::endl;
-            } else if (command == "addcarrige") {
-				std::string trainId;
-				Train* train = nullptr;
-				std::cout << "Train ID: ";
-				std::cin >> trainId;
+            }
+            else if (command == "addcarrige") {
+                std::string trainId;
+                Train* train = nullptr;
+                std::cout << "Train ID: ";
+                std::cin >> trainId;
                 train = db.findTrainInteractions(trainId);
-                
+
                 if (!train) {
-					continue;
-				}
+                    continue;
+                }
                 int id;
-				int seatCount=0;
+                int seatCount = 0;
 
                 std::cout << "Carrige ID: ";
                 std::cin >> id;
-				std::cout << "Seat count: ";
+                std::cout << "Seat count: ";
                 std::cin >> seatCount;
-				train->addCarriage(Carriage(id, seatCount));
+                train->addCarriage(Carriage(id, seatCount));
                 std::cout << "Carrige added\n";
-                
+
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
 
 
-            } else if (command == "book") {
-				std::cout << "Booking a ticket...\n";
-				std::string trainId;
-				Train* train = nullptr;
-				std::cout << "For which train? Train ID:";
+            }
+            else if (command == "book") {
+                std::cout << "Booking a ticket...\n";
+                std::string trainId;
+                Train* train = nullptr;
+                std::cout << "For which train? Train ID:";
                 std::cin >> trainId;
 
-				train = db.findTrainInteractions(trainId);
-				if (train==nullptr) { 
-					std::cout << "Train not found, exiting.\n";
+                train = db.findTrainInteractions(trainId);
+                if (train == nullptr) {
+                    std::cout << "Train not found, exiting.\n";
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
-                    continue; 
+                    continue;
                 }
-				int carriageId;
-				std::cout << "Carriage ID: ";
-				std::cin >> carriageId;
+                int carriageId;
+                std::cout << "Carriage ID: ";
+                std::cin >> carriageId;
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
-				Carriage* carriage = train->findCarriageInteractions(carriageId);
-				if (carriage==nullptr) { 
-					std::cout << "Carriage not found, exiting.\n";
-                    continue; 
+                Carriage* carriage = train->findCarriageInteractions(carriageId);
+                if (carriage == nullptr) {
+                    std::cout << "Carriage not found, exiting.\n";
+                    continue;
                 }
-				int seatNumber;
-				std::cout << "Seat number: ";
-				std::cin >> seatNumber; std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
-				std::string passengerName;
-				std::cout << "Passenger name: ";
-				std::cin.ignore(); // Ignore the newline character left in the buffer
-				std::getline(std::cin, passengerName);
+                int seatNumber;
+                std::cout << "Seat number: ";
+                std::cin >> seatNumber; std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
+                std::string passengerName;
+                std::cout << "Passenger name: ";
+                std::cin.ignore(); // Ignore the newline character left in the buffer
+                std::getline(std::cin, passengerName);
 
                 Ticket ticket(passengerName, seatNumber);
 
-                bool success=train->findCarriage(carriageId)-> reserveSeat(seatNumber, ticket);
+                bool success = train->findCarriage(carriageId)->reserveSeat(seatNumber, ticket);
 
                 std::cout << "Ticket booked successfully.\n";
 
 
-            //saving and realoading
-            } else if (command == "reload") {
+                //saving and realoading
+            }
+            else if (command == "reload") {
                 std::string filename;
                 std::cout << "Filename: ";
                 std::getline(std::cin, filename);
                 db.loadFromFile(filename);
                 std::cout << "Session loaded.\n";
-            } else if (command == "save") {
+            }
+            else if (command == "save") {
                 std::string filename;
                 std::cout << "Filename: ";
                 std::getline(std::cin, filename);
                 db.saveToFile(filename);
                 std::cout << "Session saved.\n";
 
-            } else {
+            }
+            else {
                 std::cout << "Unknown command.\n";
             }
-        } catch (const std::exception& ex) {
+        }
+        catch (const std::exception& ex) {
             std::cerr << "Error: " << ex.what() << std::endl;
         }
     }
-    try{
-		db.saveToFile("session.txt");
-	}
-	catch (const std::exception& ex) {
-		std::cerr << "Error: " << ex.what() << std::endl;
-	}
-
+    try {
+        db.saveToFile("session.txt");
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "Error: " << ex.what() << std::endl;
+    }
+}
+	_CrtDumpMemoryLeaks(); // Check for memory leaks
     return 0;
 }
