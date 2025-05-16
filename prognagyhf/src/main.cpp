@@ -105,7 +105,7 @@ int main() {
                 train = db.findTrainInteractions(trainId);
                 if (train == nullptr) {
                     std::cout << "Train not found, exiting.\n";
-                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
+                    //std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
                     continue;
                 }
                 int carriageId=0;
@@ -115,7 +115,7 @@ int main() {
                 Carriage* carriage = train->findCarriageInteractions(carriageId);
                 if (carriage == nullptr) {
                     std::cout << "Carriage not found, exiting.\n";
-                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                    //std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                     continue;
                 }
                 int seatNumber;

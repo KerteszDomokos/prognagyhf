@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Carriage">
+    <Position X="4.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAIAEAAAAAAAAAgAAACAAAAAAAEAAAAAAAAABAgE=</HashCode>
+      <FileName>src\Carriage.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Database">
+    <Position X="0.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAKEAAAAAAAAAAAAAgQAAAAAAAAAAQCAAAIAA=</HashCode>
+      <FileName>src\Database.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ticket">
+    <Position X="6" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAQAACAAAAAAAAAAAAAAACAAAAAAAACAA=</HashCode>
+      <FileName>src\Ticket.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Train">
+    <Position X="2.5" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgBhAAAAAAABAAAAAAAAAAAAAAAgAAQAAAAAAABAIgA=</HashCode>
+      <FileName>src\Train.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

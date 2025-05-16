@@ -2,7 +2,7 @@
 123
 2
 1 200
-15
+16
 af-1
 sddd-2
 kertesz-34
@@ -18,6 +18,7 @@ nagy kond-120
 nagy arpad-60
 nagy ond-122
 kis j nos-54
+dlkfn-12
 2 140
 3
 kertesz d-12
