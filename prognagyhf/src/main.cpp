@@ -5,13 +5,12 @@
 #define _CRTDBG_MAP_ALLOC
 #include <crtdbg.h>
 
-int main() {
-    //_CrtSetBreakAlloc(176);
+void menu() {
     Database db;
     std::string command;
 
     std::cout << "BME Train Ticket Management System" << std::endl;
-    std::cout << "Type 'help' for commands."<<std::endl;
+    std::cout << "Type 'help' for commands." << std::endl;
 
     try {
         db.loadFromFile("session.txt");
@@ -108,7 +107,7 @@ int main() {
                     //std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
                     continue;
                 }
-                int carriageId=0;
+                int carriageId = 0;
                 std::cout << "Carriage ID: ";
                 std::cin >> carriageId;
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
@@ -161,9 +160,11 @@ int main() {
     catch (const std::exception& ex) {
         std::cerr << "Error: " << ex.what() << std::endl;
     }
-	//db.~Database(); // Explicitly call destructor to clean up resources
-	//command.clear(); // Clear the command string
+}
 
-	//_CrtDumpMemoryLeaks(); // Check for memory leaks
+int main() {
+
+	menu(); // Start the menu loop
+	_CrtDumpMemoryLeaks(); // Check for memory leaks
     return 0;
 }
